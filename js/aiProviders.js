@@ -3,16 +3,22 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
+function getActiveEditorCode() {
+    return monaco.editor.getModels().map(model => model.getValue()).join("\n");
+}
+
+
 class AIProvider {
-    async sendMessage(message, sourceCode = '') {
+    async sendMessage(message) {
         throw new Error('sendMessage must be implemented');
     }
 }
 
 class ChatGPTProvider extends AIProvider {
-    async sendMessage(message, sourceCode = '') {
+    async sendMessage(message) {
         try {
             let contextMessage = message;
+            const sourceCode = getActiveEditorCode();
             if (sourceCode) {
                 contextMessage = `Context (current source code):
 \`\`\`
@@ -50,9 +56,10 @@ User question: ${message}`;
 }
 
 class DeepseekProvider extends AIProvider {
-    async sendMessage(message, sourceCode = '') {
+    async sendMessage(message) {
         try {
             let contextMessage = message;
+            const sourceCode = getActiveEditorCode();
             if (sourceCode) {
                 contextMessage = `Context (current source code):
 \`\`\`
@@ -90,9 +97,10 @@ User question: ${message}`;
 }
 
 class GeminiProvider extends AIProvider {
-    async sendMessage(message, sourceCode = '') {
+    async sendMessage(message) {
         try {
             let contextMessage = message;
+            const sourceCode = getActiveEditorCode();
             if (sourceCode) {
                 contextMessage = `Context (current source code):
 \`\`\`
