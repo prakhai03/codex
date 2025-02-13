@@ -110,8 +110,7 @@ export default function initChatbot(container) {
 
     }
 
-    // Reference to the source editor
-    const sourceEditor = window.sourceEditor;
+
 
     async function handleSubmit(isError = false, errorMessage = '') {
         let input = '';
@@ -133,12 +132,10 @@ export default function initChatbot(container) {
         await addMessage(input, true);
 
         try {
-            // Get the current source code
-            const sourceCode = sourceEditor ? sourceEditor.getValue() : '';
 
             // Get the selected AI provider and send message with context
             const provider = getAIProvider(currentModel);
-            const response = await provider.sendMessage(input, sourceCode);
+            const response = await provider.sendMessage(input);
 
             // Add AI response
             await addMessage(response, false);
